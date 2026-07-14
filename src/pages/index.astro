@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/layout/SiteHeader.astro";
+import SiteFooter from "../components/layout/SiteFooter.astro";
+import HeroFlame from "../components/hero/HeroFlame.astro";
+import BioStrip from "../components/sections/BioStrip.astro";
+import MusicSection from "../components/sections/MusicSection.astro";
+import LiveShows from "../components/sections/LiveShows.astro";
+import MerchSection from "../components/sections/MerchSection.astro";
+import ContactCTA from "../components/sections/ContactCTA.astro";
+---
+
+<BaseLayout>
+  <SiteHeader />
+  <main>
+    <HeroFlame />
+    <BioStrip />
+    <MusicSection />
+    <LiveShows />
+    <MerchSection />
+    <ContactCTA />
+  </main>
+  <SiteFooter />
+</BaseLayout>

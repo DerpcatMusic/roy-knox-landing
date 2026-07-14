@@ -1,0 +1,163 @@
+<div class="pointer-sparks" aria-hidden="true">
+  <span class="pointer-sparks__aura"></span>
+  {Array.from({ length: 36 }).map((_, index) => (
+    <span class="pointer-sparks__spark" data-spark={index}></span>
+  ))}
+</div>
+
+<script>
+  import { gsap } from "gsap";
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const finePointer = window.matchMedia("(pointer: fine)");
+  const layer = document.querySelector<HTMLElement>(".pointer-sparks");
+  const aura = layer?.querySelector<HTMLElement>(".pointer-sparks__aura");
+  const sparks = Array.from(
+    layer?.querySelectorAll<HTMLElement>(".pointer-sparks__spark") ?? [],
+  );
+
+  if (layer && aura && sparks.length && !reduceMotion.matches && finePointer.matches) {
+    layer.dataset.active = "true";
+
+    gsap.set(aura, { xPercent: -50, yPercent: -50, autoAlpha: 0 });
+    gsap.set(sparks, { xPercent: -50, yPercent: -50, autoAlpha: 0, scale: 0 });
+
+    const moveAuraX = gsap.quickTo(aura, "x", {
+      duration: 0.42,
+      ease: "power3.out",
+    });
+    const moveAuraY = gsap.quickTo(aura, "y", {
+      duration: 0.42,
+      ease: "power3.out",
+    });
+
+    let sparkIndex = 0;
+    let lastSparkAt = 0;
+    let lastX = window.innerWidth / 2;
+    let lastY = window.innerHeight / 2;
+
+    const spawnSpark = (x: number, y: number) => {
+      const now = performance.now();
+      if (now - lastSparkAt < 24) return;
+      lastSparkAt = now;
+
+      const burst = Math.random() > 0.62 ? 2 : 1;
+      const velocityAngle = Math.atan2(y - lastY, x - lastX) + Math.PI;
+      lastX = x;
+      lastY = y;
+
+      for (let i = 0; i < burst; i += 1) {
+        const spark = sparks[sparkIndex];
+        sparkIndex = (sparkIndex + 1) % sparks.length;
+
+        const angle = velocityAngle + (Math.random() - 0.5) * 1.1;
+        const distance = 10 + Math.random() * 26;
+        const hue = Math.random() > 0.72 ? "gold" : Math.random() > 0.5 ? "star" : "flame";
+        spark.dataset.tone = hue;
+        spark.style.setProperty("--spark-size", `${0.18 + Math.random() * 0.22}rem`);
+
+        gsap.killTweensOf(spark);
+        gsap.set(spark, {
+          x: x + (Math.random() - 0.5) * 6,
+          y: y + (Math.random() - 0.5) * 6,
+          scale: 0.7 + Math.random() * 0.8,
+          autoAlpha: 0.85,
+        });
+        gsap.to(spark, {
+          x: x + Math.cos(angle) * distance,
+          y: y + Math.sin(angle) * distance + 8,
+          scale: 0,
+          autoAlpha: 0,
+          duration: 0.7 + Math.random() * 0.32,
+          ease: "power3.out",
+        });
+      }
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      moveAuraX(event.clientX);
+      moveAuraY(event.clientY);
+      gsap.to(aura, {
+        autoAlpha: 1,
+        scale: 1,
+        duration: 0.14,
+        overwrite: true,
+      });
+      spawnSpark(event.clientX, event.clientY);
+    };
+
+    const onPointerLeave = () => {
+      gsap.to(aura, {
+        autoAlpha: 0,
+        scale: 0.72,
+        duration: 0.24,
+        overwrite: true,
+      });
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("pointerleave", onPointerLeave);
+  }
+</script>
+
+<style>
+  .pointer-sparks {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-sparks);
+    pointer-events: none;
+    overflow: hidden;
+    display: none;
+  }
+
+  .pointer-sparks[data-active="true"] {
+    display: block;
+  }
+
+  .pointer-sparks__aura,
+  .pointer-sparks__spark {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: var(--radius-pill);
+    will-change: transform, opacity;
+    mix-blend-mode: screen;
+  }
+
+  .pointer-sparks__aura {
+    width: var(--size-16);
+    height: var(--size-16);
+    background:
+      radial-gradient(circle, oklch(0.72 0.2 244 / 0.24) 0 18%, oklch(0.72 0.2 244 / 0.08) 44%, transparent 72%);
+    filter: blur(var(--size-2)) saturate(1.15);
+  }
+
+  .pointer-sparks__spark {
+    width: var(--spark-size, var(--size-1));
+    height: var(--spark-size, var(--size-1));
+    background: var(--color-flame);
+    box-shadow:
+      0 0 var(--size-2) oklch(0.72 0.2 244 / 0.86),
+      0 0 var(--size-5) oklch(0.72 0.2 244 / 0.24);
+  }
+
+  .pointer-sparks__spark[data-tone="gold"] {
+    background: var(--color-gold);
+    box-shadow:
+      0 0 var(--size-2) oklch(0.78 0.13 88 / 0.9),
+      0 0 var(--size-5) oklch(0.78 0.13 88 / 0.22);
+  }
+
+  .pointer-sparks__spark[data-tone="star"] {
+    background: var(--color-ink);
+    box-shadow:
+      0 0 var(--size-2) oklch(0.94 0.004 260 / 0.72),
+      0 0 var(--size-5) oklch(0.72 0.2 244 / 0.24);
+  }
+
+  @media (prefers-reduced-motion: reduce), (pointer: coarse) {
+    .pointer-sparks {
+      display: none;
+    }
+  }
+</style>

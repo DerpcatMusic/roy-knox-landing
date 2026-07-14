@@ -1,0 +1,47 @@
+---
+import { getProducts } from "../../lib/shopify/client";
+import { isShopifyConfigured } from "../../lib/shopify/config";
+import SectionHeading from "../ui/SectionHeading.astro";
+import MerchEmpty from "../shopify/MerchEmpty.astro";
+import ProductCarousel from "../shopify/ProductCarousel.astro";
+
+const configured = isShopifyConfigured();
+const products = configured ? await getProducts({ limit: 12 }) : [];
+const hasProducts = products.length > 0;
+---
+
+<section id="merch" class="section merch">
+  <div class="container">
+    {!configured || !hasProducts ? (
+      <MerchEmpty />
+    ) : (
+      <>
+        <div class="merch__header">
+          <SectionHeading
+            title="Merch"
+            subtitle="Blue flame apparel and limited vinyl."
+          />
+        </div>
+
+        <ProductCarousel products={products} />
+      </>
+    )}
+  </div>
+</section>
+
+<style>
+  .merch__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  @media (min-width: 768px) {
+    .merch__header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+</style>

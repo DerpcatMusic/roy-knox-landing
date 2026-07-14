@@ -1,0 +1,146 @@
+---
+interface MarqueeItem {
+  name: string;
+  src?: string;
+  invert?: boolean;
+}
+
+interface Props {
+  items: readonly MarqueeItem[];
+  speed?: number;
+  overlay?: boolean;
+}
+
+const { items, speed = 40, overlay = false } = Astro.props;
+const repeated = Array.from({ length: 4 }, () => items).flat();
+---
+
+<div class:list={["marquee", overlay && "marquee--overlay"]} role="list" aria-label="Label partners">
+  <div class="marquee__track" style={`--marquee-speed: ${speed}s`}>
+    {
+      repeated.map((item) => (
+        <span class="marquee__item" role="listitem">
+          {item.src ? (
+            <img
+              class="marquee__logo"
+              src={item.src}
+              alt={`${item.name} logo`}
+              data-invert={item.invert ? "true" : undefined}
+              width="160"
+              height="160"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : null}
+          <span class="marquee__text">{item.name}</span>
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    width: 100%;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll var(--marquee-speed, 40s) linear infinite;
+    will-change: transform;
+  }
+
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee--overlay {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 4%,
+      black 96%,
+      transparent
+    );
+  }
+
+  .marquee--overlay .marquee__item {
+    min-width: clamp(8rem, 14vw, 12rem);
+    min-height: var(--size-12);
+    padding-inline: var(--space-sm);
+  }
+
+  .marquee--overlay .marquee__logo {
+    width: clamp(var(--size-10), 4vw, var(--size-16));
+    height: clamp(var(--size-8), 3vw, var(--size-12));
+    opacity: 0.88;
+  }
+
+  .marquee--overlay .marquee__text {
+    display: none;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    min-width: clamp(12rem, 18vw, 17rem);
+    min-height: var(--size-16);
+    padding-inline: var(--space-md);
+    white-space: nowrap;
+  }
+
+  .marquee__logo {
+    width: clamp(var(--size-12), 5vw, var(--size-20));
+    height: clamp(var(--size-10), 4vw, var(--size-16));
+    object-fit: contain;
+    opacity: 0.96;
+    flex: 0 0 auto;
+  }
+
+  .marquee__logo[data-invert="true"] {
+    filter: brightness(0) invert(1);
+  }
+
+  .marquee__text {
+    font-family: var(--font-label);
+    font-size: var(--text-body);
+    font-weight: 700;
+    letter-spacing: var(--tracking-ui);
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 640px) {
+    .marquee__item {
+      min-width: 10rem;
+      padding-inline: var(--space-sm);
+    }
+
+    .marquee__logo {
+      width: var(--size-12);
+      height: var(--size-10);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      overflow-x: auto;
+      mask-image: none;
+    }
+
+    .marquee__track {
+      animation: none;
+    }
+  }
+</style>

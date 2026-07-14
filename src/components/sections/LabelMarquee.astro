@@ -1,0 +1,32 @@
+---
+import Marquee from "../ui/Marquee.astro";
+import { labels } from "../../data/labels";
+
+interface Props {
+  overlay?: boolean;
+}
+
+const { overlay = false } = Astro.props;
+---
+
+<div
+  class:list={["label-marquee", overlay && "label-marquee--overlay"]}
+  aria-label="Record labels"
+>
+  <Marquee items={labels} speed={38} overlay={overlay} />
+</div>
+
+<style>
+  .label-marquee--overlay {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 2;
+    padding-block: var(--space-md);
+    pointer-events: none;
+  }
+
+  .label-marquee--overlay :global(.marquee) {
+    pointer-events: auto;
+  }
+</style>

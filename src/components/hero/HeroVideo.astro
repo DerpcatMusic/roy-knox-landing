@@ -1,0 +1,59 @@
+---
+const poster = "/video/hero-burning-piano-poster.webp";
+const webm = "/video/hero-burning-piano.webm";
+const mp4 = "/video/hero-burning-piano.mp4";
+---
+
+<div class="hero-video" aria-hidden="true">
+  <video
+    class="hero-video__media"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    poster={poster}
+  >
+    <source src={webm} type="video/webm" />
+    <source src={mp4} type="video/mp4" />
+  </video>
+
+  <img
+    class="hero-video__still"
+    src={poster}
+    alt=""
+    width="1920"
+    height="1080"
+    fetchpriority="high"
+    decoding="async"
+  />
+</div>
+
+<style>
+  .hero-video {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-video__media,
+  .hero-video__still {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+  }
+
+  .hero-video__still {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video__media {
+      display: none;
+    }
+
+    .hero-video__still {
+      display: block;
+    }
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+import Button from "../ui/Button.astro";
+---
+
+<section class="bio-strip section--tight" aria-labelledby="bio-title">
+  <div class="container bio-strip__inner">
+    <div class="bio-strip__content">
+      <h2 id="bio-title" class="bio-strip__title">Bio</h2>
+      <p class="bio-strip__text prose-muted">
+        Roy Levi, better known as ROY KNOX, is a Bass-EDM producer known for his
+        emotions infused energetic sound.
+      </p>
+      <p class="bio-strip__text prose-muted">
+        After three years as a Navy combatant, he hung his uniform to pursue his
+        music career. From his first single <em>Lost in Sound</em>, that gathered
+        more than 30 million streams, to multi-singles in NCS — including tracks
+        like <em>Blue Eyed Demon</em>, <em>Waterfall</em> and <em>About Me</em>
+        with Koven, Roy has built a name for himself and established a wide fan
+        base in only two years.
+      </p>
+    </div>
+
+    <div class="bio-strip__aside">
+      <p class="bio-strip__stat">
+        Bringing multiple genres to life with 150 million worldwide streams — 1997
+        born producer has a bright future with more music to be released for the next
+        years.
+      </p>
+      <Button href="#music" variant="ghost" size="md">Explore discography</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bio-strip {
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .bio-strip__inner {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  @media (min-width: 768px) {
+    .bio-strip__inner {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: var(--space-3xl);
+    }
+  }
+
+  .bio-strip__title {
+    font-size: var(--text-headline);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+  }
+
+  .bio-strip__text + .bio-strip__text {
+    margin-top: var(--space-lg);
+  }
+
+  .bio-strip__text {
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    max-width: none;
+  }
+
+  .bio-strip__text em {
+    font-style: italic;
+    color: var(--color-ink);
+  }
+
+  .bio-strip__aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .bio-strip__stat {
+    font-family: var(--font-display);
+    font-size: var(--text-subhead);
+    line-height: 1.25;
+    color: var(--color-ink);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    max-width: none;
+  }
+</style>

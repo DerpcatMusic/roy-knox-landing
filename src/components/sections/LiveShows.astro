@@ -1,0 +1,74 @@
+---
+import SectionHeading from "../ui/SectionHeading.astro";
+
+const bandsintownArtist = "ROY KNOX";
+---
+
+<section id="live" class="section live">
+  <div class="container">
+    <SectionHeading
+      title="Live"
+      subtitle="Played on radios and festivals across the world."
+    />
+
+    <div class="live__bandsintown">
+      <a
+        class="bit-widget-initializer"
+        data-artist-name={bandsintownArtist}
+        data-display-local-dates="false"
+        data-display-past-dates="false"
+        data-auto-style="false"
+        data-text-color="#f2f1ef"
+        data-link-color="#42a5ff"
+        data-link-text-color="#09090a"
+        data-background-color="rgba(0,0,0,0)"
+        data-separator-color="rgba(242,241,239,0.18)"
+        data-display-limit="6"
+        data-display-start-time="true"
+        data-display-lineup="false"
+        data-display-logo="false"
+        data-display-track-button="true"
+        data-display-play-my-city="true"
+        data-widget-width="100%"
+        data-font="Barlow"
+      ></a>
+    </div>
+  </div>
+</section>
+
+<script is:inline async src="https://widgetv3.bandsintown.com/main.min.js"></script>
+
+<style is:global>
+  .live {
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .live__bandsintown {
+    padding-block-start: var(--space-sm);
+  }
+
+  .live__bandsintown .bit-widget {
+    font-family: var(--font-body) !important;
+  }
+
+  .live__bandsintown .bit-widget-container,
+  .live__bandsintown .bit-widget {
+    background: transparent !important;
+  }
+
+  .live__bandsintown .bit-event,
+  .live__bandsintown .bit-widget .bit-event {
+    border-color: var(--color-border) !important;
+  }
+
+  .live__bandsintown .bit-rsvp,
+  .live__bandsintown .bit-offers,
+  .live__bandsintown .bit-play-my-city-button,
+  .live__bandsintown .bit-track-button {
+    border-radius: var(--radius-pill) !important;
+    font-family: var(--font-label) !important;
+    font-weight: 700 !important;
+    letter-spacing: var(--tracking-ui) !important;
+    text-transform: uppercase !important;
+  }
+</style>

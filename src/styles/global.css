@@ -1,0 +1,153 @@
+@import "./tokens.css";
+@import "./animations.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  font-kerning: normal;
+  font-optical-sizing: auto;
+  overflow-x: hidden;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  overflow: clip;
+  background: var(--color-bg);
+  border-end-start-radius: clamp(var(--size-8), 5vw, var(--size-20));
+  border-end-end-radius: clamp(var(--size-8), 5vw, var(--size-20));
+  box-shadow: 0 var(--size-4) var(--size-8) oklch(0.04 0.004 260 / 0.45);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--color-ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--color-flame);
+}
+
+:focus-visible {
+  outline: 0.125rem solid var(--color-flame);
+  outline-offset: 0.1875rem;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  font-optical-sizing: auto;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  max-width: 65ch;
+  text-wrap: pretty;
+}
+
+.prose-muted {
+  color: var(--color-ink-muted);
+}
+
+.bio-strip__text em,
+.hero__desc em {
+  font-style: italic;
+  color: var(--color-ink);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.container {
+  width: min(100% - var(--gutter) * 2, var(--max-width));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--space-3xl);
+  position: relative;
+}
+
+.section--tight {
+  padding-block: var(--space-xl);
+}
+
+/* Film grain overlay — subtle texture on charcoal void */
+.grain,
+body {
+  position: relative;
+}
+
+.grain::after,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .grain::after,
+  body::after {
+    animation: grain-shift 8s steps(10) infinite;
+  }
+}
+
+.index-label {
+  font-family: var(--font-label);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}

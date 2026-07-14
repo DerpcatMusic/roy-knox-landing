@@ -1,0 +1,75 @@
+---
+import type { Product } from "../../lib/shopify/types";
+import ProductCard from "./ProductCard.astro";
+
+interface Props {
+  products: Product[];
+}
+
+const { products } = Astro.props;
+---
+
+<div class="product-carousel">
+  <ul class="product-carousel__track" aria-label="Shop products">
+    {products.map((product, index) => (
+      <ProductCard product={product} index={index} />
+    ))}
+  </ul>
+</div>
+
+<style>
+  .product-carousel {
+    position: relative;
+  }
+
+  .product-carousel::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: var(--size-12);
+    background: linear-gradient(to left, var(--color-bg), transparent);
+    pointer-events: none;
+  }
+
+  .product-carousel__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(80vw, 18rem);
+    gap: var(--space-lg);
+    margin: 0;
+    padding: 0 var(--space-xs) var(--space-md) 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-flame) var(--color-surface);
+  }
+
+  .product-carousel__track::-webkit-scrollbar {
+    height: var(--size-1-5);
+  }
+
+  .product-carousel__track::-webkit-scrollbar-track {
+    background: var(--color-surface);
+    border-radius: var(--radius-pill);
+  }
+
+  .product-carousel__track::-webkit-scrollbar-thumb {
+    background: var(--color-flame);
+    border-radius: var(--radius-pill);
+  }
+
+  @media (min-width: 768px) {
+    .product-carousel__track {
+      grid-auto-columns: min(42vw, 16rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .product-carousel__track {
+      grid-auto-columns: min(28vw, 18rem);
+    }
+  }
+</style>

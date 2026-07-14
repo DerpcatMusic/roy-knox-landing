@@ -1,0 +1,112 @@
+---
+import Button from "../ui/Button.astro";
+---
+
+<section id="contact" class="section contact">
+  <div class="container contact__inner">
+    <div class="contact__copy">
+      <h2 class="contact__title">Contact</h2>
+      <p class="contact__desc prose-muted">
+        Send demos to Roy's team, or contact booking for live dates and festival
+        routing.
+      </p>
+    </div>
+
+    <div class="contact__channels">
+      <a href="mailto:royknoxdemos@gmail.com" class="contact__link">
+        <span class="contact__link-label">Demos</span>
+        <span class="contact__link-value">royknoxdemos@gmail.com</span>
+      </a>
+      <a href="mailto:vu@royknoxmusic.com" class="contact__link">
+        <span class="contact__link-label">Booking</span>
+        <span class="contact__link-value">vu@royknoxmusic.com</span>
+      </a>
+    </div>
+
+    <Button
+      href="https://open.spotify.com/artist/6rADW3yvxPKpxWuNUKEed3"
+      variant="primary"
+      size="lg"
+      external
+      class="contact__cta"
+    >
+      Stream on Spotify
+    </Button>
+  </div>
+</section>
+
+<style>
+  .contact__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2xl);
+    text-align: left;
+  }
+
+  @media (min-width: 768px) {
+    .contact__inner {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .contact__title {
+    font-size: var(--text-headline);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-display);
+  }
+
+  .contact__desc {
+    margin-top: var(--space-md);
+    font-size: var(--text-lg);
+  }
+
+  .contact__channels {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .contact__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding-block: var(--space-md);
+    text-decoration: none;
+    color: inherit;
+    border-block-end: 1px solid var(--color-border);
+    transition:
+      border-color var(--duration-base) var(--ease-out-quart);
+  }
+
+  .contact__link:hover {
+    border-color: var(--color-border-flame);
+  }
+
+  .contact__link-label {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: var(--tracking-ui);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  .contact__link-value {
+    font-size: var(--text-body);
+    font-weight: 500;
+  }
+
+  .contact__cta {
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .contact__cta {
+      width: auto;
+    }
+  }
+</style>

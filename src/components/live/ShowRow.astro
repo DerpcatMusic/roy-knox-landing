@@ -1,0 +1,125 @@
+---
+import Button from "../ui/Button.astro";
+
+interface Props {
+  date: string;
+  venue: string;
+  city: string;
+  status: "on-sale" | "presale" | "sold-out";
+  ticketUrl: string;
+  index: number;
+}
+
+const { date, venue, city, status, ticketUrl, index } = Astro.props;
+
+const statusLabels = {
+  "on-sale": "On sale",
+  presale: "Presale",
+  "sold-out": "Sold out",
+} as const;
+---
+
+<li class="show-row" style={`--i: ${index}`}>
+  <article class="show-row__inner">
+    <time class="show-row__date">{date}</time>
+    <div class="show-row__details">
+      <h3 class="show-row__venue">{venue}</h3>
+      <p class="show-row__city prose-muted">{city}</p>
+    </div>
+    <div class="show-row__action">
+      <span class:list={["show-row__badge", `show-row__badge--${status}`]}>
+        {statusLabels[status]}
+      </span>
+      {status !== "sold-out" && (
+        <Button href={ticketUrl} variant="ember" size="md">
+          Tickets
+        </Button>
+      )}
+    </div>
+  </article>
+</li>
+
+<style>
+  .show-row {
+    animation: reveal-up var(--duration-slow) var(--ease-out-quart) both;
+    animation-delay: calc(var(--i, 0) * 100ms);
+  }
+
+  .show-row__inner {
+    display: grid;
+    gap: var(--space-md) var(--space-lg);
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    align-items: center;
+    transition:
+      background-color var(--duration-base) var(--ease-out-quart),
+      border-color var(--duration-base) var(--ease-out-quart);
+  }
+
+  .show-row__inner:hover {
+    background: oklch(0.78 0.13 88 / 0.055);
+    border-color: oklch(0.78 0.13 88 / 0.45);
+  }
+
+  @media (min-width: 640px) {
+    .show-row__inner {
+      grid-template-columns: 7.5rem 1fr auto;
+    }
+  }
+
+  .show-row__date {
+    font-family: var(--font-label);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: var(--tracking-ui);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    white-space: nowrap;
+  }
+
+  .show-row__venue {
+    font-family: var(--font-display);
+    font-size: var(--text-subhead);
+    font-weight: 500;
+  }
+
+  .show-row__city {
+    margin-top: var(--space-xs);
+    font-size: var(--text-sm);
+  }
+
+  .show-row__action {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .show-row__badge {
+    font-size: var(--text-caption);
+    font-weight: 700;
+    letter-spacing: var(--tracking-ui);
+    text-transform: uppercase;
+    padding: var(--size-1) var(--size-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+  }
+
+  .show-row__badge--on-sale {
+    background: oklch(0.78 0.13 88 / 0.14);
+    color: var(--color-gold);
+    border-color: oklch(0.78 0.13 88 / 0.5);
+  }
+
+  .show-row__badge--presale {
+    background: var(--color-surface);
+    color: var(--color-ink-muted);
+  }
+
+  .show-row__badge--sold-out {
+    background: var(--color-surface);
+    color: var(--color-ink-muted);
+    opacity: 0.7;
+  }
+</style>

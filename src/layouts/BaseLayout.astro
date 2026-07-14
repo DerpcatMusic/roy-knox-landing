@@ -1,0 +1,59 @@
+---
+import CartDrawer from "../components/shopify/CartDrawer.svelte";
+import PointerSparkTrail from "../components/fx/PointerSparkTrail.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "ROY KNOX — Blue Flame Landing",
+  description = "Melodic bass music. Blue flame. Burning piano. 150M+ streams worldwide.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <svg class="fx-defs" aria-hidden="true" focusable="false">
+      <filter id="rk-button-distort">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.012 0.08"
+          numOctaves="2"
+          seed="8"
+          result="noise"
+        />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
+    <slot />
+    <PointerSparkTrail />
+    <CartDrawer client:load />
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/global.css";
+
+  .fx-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+</style>

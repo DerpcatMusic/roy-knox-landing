@@ -1,0 +1,130 @@
+---
+import Button from "../ui/Button.astro";
+import CartButton from "../shopify/CartButton.svelte";
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__logo" aria-label="ROY KNOX home">
+      <img
+        src="/brand/roy-knox-logo-white.png"
+        alt=""
+        class="site-header__logo-image"
+        width="14111"
+        height="4372"
+        decoding="async"
+      />
+    </a>
+
+    <nav class="site-header__nav" aria-label="Primary">
+      <a href="#music">Music</a>
+      <a href="#live">Live</a>
+      <a href="#merch">Merch</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="site-header__actions">
+      <CartButton client:load />
+      <Button href="#live" variant="primary" size="md" class="site-header__cta">
+        Tickets
+      </Button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  const header = document.querySelector(".site-header");
+  const syncHeader = () => {
+    header?.classList.toggle("site-header--scrolled", window.scrollY > 12);
+  };
+
+  syncHeader();
+  window.addEventListener("scroll", syncHeader, { passive: true });
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: var(--z-sticky);
+    padding-block: var(--space-md);
+    background: transparent;
+    border-bottom: 0.0625rem solid transparent;
+    transition:
+      background-color var(--duration-base) var(--ease-out-quart),
+      border-color var(--duration-base) var(--ease-out-quart),
+      padding var(--duration-base) var(--ease-out-quart);
+  }
+
+  .site-header--scrolled {
+    padding-block: var(--space-sm);
+    background: oklch(0.09 0.004 260 / 0.94);
+    border-bottom-color: var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+  }
+
+  .site-header__logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-ink);
+    min-width: 0;
+  }
+
+  .site-header__logo-image {
+    width: clamp(8rem, 18vw, 13rem);
+    height: auto;
+    opacity: 0.96;
+  }
+
+  .site-header__nav {
+    display: none;
+    gap: var(--space-xl);
+  }
+
+  .site-header__nav a {
+    font-family: var(--font-label);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: var(--tracking-ui);
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-ink-muted);
+    transition: color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .site-header__nav a:hover {
+    color: var(--color-flame);
+  }
+
+  @media (min-width: 768px) {
+    .site-header__nav {
+      display: flex;
+    }
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .site-header__cta {
+      display: none;
+    }
+  }
+</style>

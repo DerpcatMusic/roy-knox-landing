@@ -1,0 +1,187 @@
+---
+interface Props {
+  title: string;
+  label: string;
+  releaseDate: string;
+  artworkUrl?: string;
+  href: string;
+  index: number;
+}
+
+const { title, label, releaseDate, artworkUrl, href, index } = Astro.props;
+const releaseArtwork = artworkUrl
+  ? `--release-artwork: url("${artworkUrl.replace(/["\\\n\r]/g, "")}")`
+  : "";
+---
+
+<li class="release-row" style={`--i: ${index}; ${releaseArtwork}`}>
+  <a href={href} class="release-row__link" target="_blank" rel="noopener noreferrer">
+    {
+      artworkUrl ? (
+        <img
+          class="release-row__art"
+          src={artworkUrl}
+          alt=""
+          width="56"
+          height="56"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <span class="release-row__art release-row__art--placeholder" aria-hidden="true" />
+      )
+    }
+    <span class="release-row__meta">
+      <span class="release-row__title">{title}</span>
+      <span class="release-row__label prose-muted">{label}</span>
+    </span>
+    <time class="release-row__date">{releaseDate}</time>
+    <span class="release-row__play" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M6 4l10 6-10 6V4z" />
+      </svg>
+    </span>
+  </a>
+</li>
+
+<style>
+  .release-row {
+    animation: reveal-up var(--duration-slow) var(--ease-out-quart) both;
+    animation-delay: calc(var(--i, 0) * 80ms);
+  }
+
+  .release-row__link {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--size-16) 1fr auto auto;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    text-decoration: none;
+    color: inherit;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--color-graphite-950);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition:
+      background-color var(--duration-base) var(--ease-out-quart),
+      border-color var(--duration-base) var(--ease-out-quart);
+  }
+
+  .release-row__link::before,
+  .release-row__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .release-row__link::before {
+    z-index: -1;
+    background:
+      linear-gradient(90deg, var(--color-bg) 0%, oklch(0.09 0.004 260 / 0.96) 34%, oklch(0.09 0.004 260 / 0.68) 62%, oklch(0.09 0.004 260 / 0.22) 100%),
+      var(--release-artwork, linear-gradient(90deg, var(--color-graphite-950), var(--color-graphite-850)));
+    background-position: center right;
+    background-size: cover;
+  }
+
+  .release-row__link::after {
+    z-index: -2;
+    width: 46%;
+    margin-left: auto;
+    background-image: var(--release-artwork);
+    background-position: center;
+    background-size: cover;
+    filter: blur(1.375rem) saturate(1.35);
+    transform: scale(1.12);
+    opacity: 0.78;
+  }
+
+  .release-row__link:hover {
+    border-color: var(--color-border-flame);
+  }
+
+  .release-row__art {
+    width: var(--size-16);
+    height: var(--size-16);
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .release-row__art--placeholder {
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+  }
+
+  .release-row__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .release-row__title {
+    font-family: var(--font-body);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .release-row__label {
+    font-size: var(--text-sm);
+  }
+
+  .release-row__date {
+    font-family: var(--font-label);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: var(--tracking-ui);
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .release-row__play {
+    display: grid;
+    place-items: center;
+    width: var(--size-10);
+    height: var(--size-10);
+    background: var(--color-flame);
+    color: var(--color-bg);
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    transform: scale(0.8);
+    position: relative;
+    z-index: 1;
+    transition:
+      opacity var(--duration-base) var(--ease-out-quart),
+      transform var(--duration-base) var(--ease-out-quart);
+  }
+
+  .release-row__link:hover .release-row__play,
+  .release-row__link:focus-visible .release-row__play {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  @media (max-width: 480px) {
+    .release-row__link {
+      grid-template-columns: var(--size-16) 1fr auto;
+      padding: var(--space-md);
+      border-radius: var(--radius-lg);
+    }
+
+    .release-row__date {
+      display: none;
+    }
+  }
+</style>
